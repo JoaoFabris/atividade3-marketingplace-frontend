@@ -4,6 +4,27 @@ function FormularioProduto({ onCadastrar }) {
   const [nome, setNome] = useState('');
   const [preco, setPreco] = useState('');
   const [categoria, setCategoria] = useState('');
+  const [imagem, setImagem] = useState(null); // agora guarda a imagem convertida (Data URL)
+  const [preview, setPreview] = useState(null); // usado só para mostrar a pré-visualização
+
+  // Quando o usuário escolhe um arquivo, convertemos ele para Data URL
+  // usando FileReader - assim conseguimos guardar a imagem em estado do React
+  // sem precisar de um servidor para fazer upload de verdade.
+  function handleImagemChange(e) {
+    const arquivo = e.target.files[0];
+    if (!arquivo) {
+      setImagem(null);
+      setPreview(null);
+      return;
+    }
+
+    const leitor = new FileReader();
+    leitor.onload = () => {
+      setImagem(leitor.result); // string base64 tipo "data:image/jpeg;base64,..."
+      setPreview(leitor.result);
+    };
+    leitor.readAsDataURL(arquivo);
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -19,12 +40,15 @@ function FormularioProduto({ onCadastrar }) {
       preco: parseFloat(preco),
       categoria,
       promocao: false,
+      imagem: imagem || null, // se não escolheu arquivo, fica null (usa placeholder)
     };
 
     onCadastrar(novoProduto);
     setNome('');
     setPreco('');
     setCategoria('');
+    setImagem(null);
+    setPreview(null);
   }
 
   return (
@@ -60,9 +84,29 @@ function FormularioProduto({ onCadastrar }) {
         className="border border-gray-300 rounded p-2 text-sm"
       />
 
+      <div>
+        <label className="text-sm text-gray-600 block mb-1">
+          Imagem do produto (opcional)
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImagemChange}
+          className="border border-gray-300 rounded p-2 text-sm w-full"
+        />
+      </div>
+
+      {preview && (
+        <img
+          src={preview}
+          alt="Pré-visualização"
+          className="w-full h-32 object-cover rounded"
+        />
+      )}
+
       <button
         type="submit"
-        className="bg-green-600 hover:bg-green-700 text-white rounded p-2 transition-colors"
+        className="bg-unyleya-coral hover:bg-unyleya-coralDark text-white rounded p-2 transition-colors"
       >
         Cadastrar
       </button>

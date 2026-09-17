@@ -12,7 +12,7 @@ function Carrinho({ itens, onRemover }) {
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4">
-      <h2 className="text-lg font-bold mb-2">🛒 Carrinho ({itens.length})</h2>
+      <h2 className="text-lg font-bold mb-2"> Carrinho ({itens.length})</h2>
       <ul className="my-2">
         {itens.map((item, index) => (
           <li

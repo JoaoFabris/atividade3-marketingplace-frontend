@@ -5,15 +5,19 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import RotaPrivada from './components/RotaPrivada';
 import Home from './pages/Home';
+import ListaProdutos from './pages/ListaProdutos';
 import DetalhesProduto from './pages/DetalhesProduto';
 import CarrinhoPage from './pages/CarrinhoPage';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
+import produtosIniciais from './data/produtos';
 
 const CHAVE_CARRINHO = 'marketplace:carrinho';
 const CHAVE_USUARIO = 'marketplace:usuario';
 
 function App() {
+  const [produtos, setProdutos] = useState(produtosIniciais);
+
   const [carrinho, setCarrinho] = useState(() => {
     try {
       const salvo = localStorage.getItem(CHAVE_CARRINHO);
@@ -45,6 +49,10 @@ function App() {
     }
   }, [usuario]);
 
+  function cadastrarProduto(novoProduto) {
+    setProdutos((atuais) => [...atuais, novoProduto]);
+  }
+
   function adicionarAoCarrinho(produto) {
     setCarrinho((itensAtuais) => [...itensAtuais, produto]);
   }
@@ -63,45 +71,54 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="app">
+      <div className="app min-h-screen flex flex-col">
         <Header
           quantidadeCarrinho={carrinho.length}
           usuario={usuario}
           onLogout={fazerLogout}
         />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                carrinho={carrinho}
-                onAdicionarAoCarrinho={adicionarAoCarrinho}
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />}>
+              <Route
+                index
+                element={
+                  <ListaProdutos
+                    produtos={produtos}
+                    onCadastrar={cadastrarProduto}
+                    onAdicionarAoCarrinho={adicionarAoCarrinho}
+                  />
+                }
               />
-            }
-          >
+              <Route
+                path="produto/:id"
+                element={
+                  <DetalhesProduto
+                    produtos={produtos}
+                    onAdicionarAoCarrinho={adicionarAoCarrinho}
+                  />
+                }
+              />
+            </Route>
+
             <Route
-              path="produto/:id"
+              path="/carrinho"
               element={
-                <DetalhesProduto onAdicionarAoCarrinho={adicionarAoCarrinho} />
+                <RotaPrivada usuario={usuario}>
+                  <CarrinhoPage
+                    itens={carrinho}
+                    onRemover={removerDoCarrinho}
+                  />
+                </RotaPrivada>
               }
             />
-          </Route>
 
-          {/* Rota protegida: só acessa quem estiver logado */}
-          <Route
-            path="/carrinho"
-            element={
-              <RotaPrivada usuario={usuario}>
-                <CarrinhoPage itens={carrinho} onRemover={removerDoCarrinho} />
-              </RotaPrivada>
-            }
-          />
+            <Route path="/login" element={<Login onLogin={fazerLogin} />} />
 
-          <Route path="/login" element={<Login onLogin={fazerLogin} />} />
-
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
 
         <Footer />
       </div>

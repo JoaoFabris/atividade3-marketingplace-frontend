@@ -53,7 +53,7 @@ function Login({ onLogin }) {
 
         <button
           type="submit"
-          className="bg-slate-800 hover:bg-slate-900 text-white rounded p-2 transition-colors"
+          className="bg-unyleya-primary hover:bg-unyleya-dark text-white rounded p-2 transition-colors"
         >
           Entrar
         </button>

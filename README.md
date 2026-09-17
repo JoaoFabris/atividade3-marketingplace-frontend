@@ -24,4 +24,5 @@ representam partes da tela (um botão, um card de produto, um cabeçalho, etc).
 
 - `src/components/` → componentes reutilizáveis (Header, Footer, ProdutoCard...)
 - `src/pages/` → páginas completas da aplicação (Home, Detalhes, 404...)
+
 # atividade3-marketingplace-frontend

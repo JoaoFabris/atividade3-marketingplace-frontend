@@ -3,7 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reset básico continua útil mesmo com Tailwind */
 * {
   box-sizing: border-box;
+}
+
+/* Garante que a página sempre ocupe no mínimo 100% da altura da tela */
+html,
+body,
+#root {
+  height: 100%;
 }
