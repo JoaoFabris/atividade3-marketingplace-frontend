@@ -4,7 +4,7 @@ function Header({ quantidadeCarrinho = 0, usuario, onLogout }) {
   return (
     <header className="bg-unyleya-primary text-white p-5 flex flex-wrap justify-between items-center gap-3">
       <Link to="/" className="text-white no-underline">
-        <h1 className="text-xl font-bold"> Marketplace</h1>
+        <h1 className="text-xl font-bold"> Marketplace João Fabris</h1>
       </Link>
       <nav className="flex items-center gap-5">
         <Link
@@ -12,12 +12,6 @@ function Header({ quantidadeCarrinho = 0, usuario, onLogout }) {
           className="text-white text-sm hover:text-unyleya-coral transition-colors"
         >
           Home
-        </Link>
-        <Link
-          to="/#produtos"
-          className="text-white text-sm hover:text-unyleya-coral transition-colors"
-        >
-          Produtos
         </Link>
         <Link
           to="/carrinho"

@@ -1,15 +1,12 @@
 import { useState } from 'react';
 
-function FormularioProduto({ onCadastrar }) {
+function FormularioProduto({ onCadastrar, categorias = [] }) {
   const [nome, setNome] = useState('');
   const [preco, setPreco] = useState('');
   const [categoria, setCategoria] = useState('');
-  const [imagem, setImagem] = useState(null); // agora guarda a imagem convertida (Data URL)
-  const [preview, setPreview] = useState(null); // usado só para mostrar a pré-visualização
+  const [imagem, setImagem] = useState(null);
+  const [preview, setPreview] = useState(null);
 
-  // Quando o usuário escolhe um arquivo, convertemos ele para Data URL
-  // usando FileReader - assim conseguimos guardar a imagem em estado do React
-  // sem precisar de um servidor para fazer upload de verdade.
   function handleImagemChange(e) {
     const arquivo = e.target.files[0];
     if (!arquivo) {
@@ -20,7 +17,7 @@ function FormularioProduto({ onCadastrar }) {
 
     const leitor = new FileReader();
     leitor.onload = () => {
-      setImagem(leitor.result); // string base64 tipo "data:image/jpeg;base64,..."
+      setImagem(leitor.result);
       setPreview(leitor.result);
     };
     leitor.readAsDataURL(arquivo);
@@ -40,7 +37,7 @@ function FormularioProduto({ onCadastrar }) {
       preco: parseFloat(preco),
       categoria,
       promocao: false,
-      imagem: imagem || null, // se não escolheu arquivo, fica null (usa placeholder)
+      imagem: imagem || null,
     };
 
     onCadastrar(novoProduto);
@@ -76,13 +73,18 @@ function FormularioProduto({ onCadastrar }) {
         className="border border-gray-300 rounded p-2 text-sm"
       />
 
-      <input
-        type="text"
-        placeholder="Categoria"
+      <select
         value={categoria}
         onChange={(e) => setCategoria(e.target.value)}
-        className="border border-gray-300 rounded p-2 text-sm"
-      />
+        className="border border-gray-300 rounded p-2 text-sm bg-white text-gray-700"
+      >
+        <option value="">Selecione uma categoria</option>
+        {categorias.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
 
       <div>
         <label className="text-sm text-gray-600 block mb-1">
